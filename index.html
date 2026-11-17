@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Павел · сайты для малого бизнеса</title>
+<meta name="description" content="Одностраничные сайты для небольшого бизнеса: первый вариант в течение 2–3 дней, показываю до оплаты, правки обычно в тот же день. От 15 000 ₽.">
+<script>document.documentElement.classList.add('js-motion');setTimeout(function(){if(!window.Motion)document.documentElement.classList.remove('js-motion')},3000)</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="engine/motion.css">
+<style>
+  html, body { overflow-x: clip; }
+  .bar__mark { display: inline-flex; align-items: center; gap: .6rem; font-weight: 600; text-decoration: none; }
+  .mono { width: 2.1rem; height: 2.1rem; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 700 1rem/1 var(--font-display); }
+
+  /* первый экран: текст слева, «окно браузера» с работой справа */
+  .hero--split h1 { max-width: 14ch; }
+  .hero--split .label b { color: var(--accent); font-weight: 600; }
+  .proof { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: var(--s6); color: var(--ink-soft); font-size: var(--t-sm); }
+  .proof span::before { content: "✓"; color: var(--accent); margin-right: .45rem; font-weight: 700; }
+  .device { position: relative; }
+  .window { border-radius: 14px; overflow: hidden; background: #1d1f24; box-shadow: 0 30px 70px rgba(20,22,27,.25); }
+  .window__bar { height: 28px; display: flex; gap: 7px; align-items: center; padding-left: 14px; background: #2a2d34; }
+  .window__bar i { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; } .window__bar i:nth-child(2) { background: #febc2e; } .window__bar i:nth-child(3) { background: #28c840; }
+  .window img { display: block; width: 100%; }
+  .phone { position: absolute; right: -4%; bottom: -12%; width: 30%; padding: 6px; border-radius: 26px; background: #0b0b0d; box-shadow: 0 24px 50px rgba(0,0,0,.35); }
+  .phone img { display: block; width: 100%; border-radius: 20px; }
+
+  /* фирменный ход: «сначала показываю» – работы сменяют друг друга в окне браузера по мере прокрутки */
+  .show { --pad: var(--gutter); }
+  .show [data-stage] { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(3rem, 6vw, 6rem); align-items: center; padding: 0 var(--pad); max-width: calc(var(--maxw) + 2 * var(--gutter)); margin-inline: auto; }
+  .show__copy { display: grid; }
+  .show__copy > div { grid-area: 1 / 1; }
+  .show__n { font: 600 var(--t-sm)/1 var(--font-display); color: var(--accent); letter-spacing: .08em; }
+  .show__copy h2 { margin-top: var(--s4); font-size: clamp(2rem, 1.1rem + 2.6vw, 3.4rem); overflow-wrap: normal; }
+  .show__copy p { margin-top: var(--s4); color: var(--ink-soft); max-width: 34ch; }
+  .show__copy .tag { display: inline-block; margin-top: var(--s5); padding: .35em .9em; border-radius: 999px; border: 1px solid var(--hair); font-size: var(--t-xs); color: var(--ink-soft); }
+  .show .window { aspect-ratio: 1440 / 928; }
+  .show [data-stack] { aspect-ratio: 16 / 10; }
+  .show [data-stack] img { object-fit: cover; object-position: top; }
+  .show__dots { display: flex; gap: .5rem; margin-top: var(--s5); }
+  .show__dots button { width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 1px solid var(--hair); background: transparent; color: var(--ink); font: 600 var(--t-xs)/1 var(--font-text); }
+  .show__dots button.is-active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+  /* работы списком */
+  .works { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s7) var(--s6); margin-top: var(--s7); }
+  .work .device { margin-bottom: var(--s6); }
+  .work .phone { width: 26%; bottom: -10%; right: -2%; }
+  .work h3 { font: 600 var(--t-lg)/1.2 var(--font-display); margin-top: var(--s5); }
+  .work p { color: var(--ink-soft); margin-top: var(--s2); }
+
+  /* как работаю */
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s5); margin-top: var(--s7); counter-reset: s; }
+  .steps li { list-style: none; border-top: 2px solid var(--accent); padding-top: var(--s4); }
+  .steps b { display: block; font: 600 var(--t-lg)/1.2 var(--font-display); }
+  .steps li > span { display: block; margin-top: var(--s2); color: var(--ink-soft); font-size: var(--t-sm); }
+
+  /* цены */
+  .prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s5); margin-top: var(--s7); }
+  .price-card { background: var(--surface); border-radius: var(--radius); padding: var(--s7) var(--s6); display: flex; flex-direction: column; }
+  .price-card--main { background: var(--accent); color: var(--accent-ink); }
+  .price-card h3 { font: 600 var(--t-lg)/1.2 var(--font-display); }
+  .price-card .sum { margin-top: var(--s4); font: 700 var(--t-2xl)/1 var(--font-display); font-variant-numeric: lining-nums tabular-nums; }
+  .price-card ul { margin-top: var(--s5); padding: 0; display: grid; gap: .55rem; }
+  .price-card li { list-style: none; padding-left: 1.4rem; position: relative; }
+  .price-card li::before { content: "✓"; position: absolute; left: 0; font-weight: 700; }
+  .price-card li::before { color: var(--accent); } .price-card--main li::before { color: var(--accent-ink); }
+  .nw { white-space: nowrap; }
+  .price-note { margin-top: var(--s5); color: var(--ink-soft); font-size: var(--t-sm); max-width: 62ch; }
+
+  .contact .lede { max-width: 40ch; color: var(--ink); }
+  .contact__line { margin-top: var(--s6); font: 600 var(--t-xl)/1.3 var(--font-display); }
+
+  @media (max-width: 860px) {
+    .show [data-stage] { grid-template-columns: 1fr; gap: var(--s5); align-content: center; }
+    .show__copy p { display: none; }
+    .works, .prices { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .hero--split .device { margin-bottom: 2rem; }
+  }
+  @media (max-width: 480px) { .steps { grid-template-columns: 1fr; } .bar__mark { font-size: .95rem; gap: .45rem; } .mono { width: 1.8rem; height: 1.8rem; font-size: .85rem; } .bar .btn { padding: .7em 1.1em; } }
+</style>
+</head>
+<body>
+<div data-progress></div>
+
+<header class="bar" data-header>
+  <a class="bar__mark" href="#top"><span class="mono" aria-hidden="true">С</span>Сайты для бизнеса</a>
+  <nav class="bar__right" aria-label="Быстрые ссылки">
+    <a class="btn" href="#kontakt">Написать</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero--split" id="hero" aria-label="Главный экран">
+    <div>
+      <p class="label" data-reveal="up">Частный мастер · <b>работаю удалённо</b></p>
+      <h1 class="display display--xl" data-split style="margin-top:1rem">Сайты для малого бизнеса</h1>
+      <p class="lede" data-reveal="up" style="--delay:300ms">Автосервисы, бани, кофейни, мастерские. Первый вариант покажу в течение <span class="nw">2–3 дней</span>, а договариваться будем, когда увидите результат.</p>
+      <div class="btn-row" data-reveal="up" style="--delay:450ms">
+        <a class="btn" href="#kontakt" data-magnet="0.25">Обсудить сайт</a>
+        <a class="btn btn--ghost" href="#raboty">Посмотреть работы</a>
+      </div>
+      <div class="proof" data-reveal="up" style="--delay:600ms"><span>от 15 000 ₽</span><span>первый вариант в течение 2–3 дней</span><span>правки обычно в тот же день</span></div>
+    </div>
+    <div class="device" data-reveal="scale" style="--delay:200ms">
+      <div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/minus-desk.jpg" alt="Пример сайта автосервиса на компьютере" width="1400" height="875"></div>
+      <div class="phone"><img src="assets/images/zhar-phone.jpg" alt="Пример сайта кофейни на телефоне" width="560" height="1213"></div>
+    </div>
+  </section>
+
+  <section class="show" data-scene="3.4" aria-label="Работы по нишам">
+    <div data-stage>
+      <div>
+        <div class="show__copy">
+          <div data-for="0"><span class="show__n">01 / 04</span><h2 class="display display--lg">Автосервис</h2><p>Зимняя тема, цены на работы и запись на проверку в одно нажатие.</p><span class="tag">свой стиль под нишу</span></div>
+          <div data-for="1"><span class="show__n">02 / 04</span><h2 class="display display--lg">Баня</h2><p>Тёплый тёмный тон, залы с ценами за час и бронирование по телефону.</p><span class="tag">атмосфера и залы</span></div>
+          <div data-for="2"><span class="show__n">03 / 04</span><h2 class="display display--lg">Кофейня</h2><p>Меню с ценами и форма заявки: человек оставляет телефон, владелец получает сообщение.</p><span class="tag">с формой заявки</span></div>
+          <div data-for="3"><span class="show__n">04 / 04</span><h2 class="display display--lg">Мастерская</h2><p>Светлая страница с графикой: курсы, цены и запись на пробное занятие.</p><span class="tag">светлая тема</span></div>
+        </div>
+        <div class="show__dots" aria-label="Переключить пример">
+          <button type="button" data-goto="0" aria-label="Автосервис">1</button>
+          <button type="button" data-goto="1" aria-label="Баня">2</button>
+          <button type="button" data-goto="2" aria-label="Кофейня">3</button>
+          <button type="button" data-goto="3" aria-label="Мастерская">4</button>
+        </div>
+      </div>
+      <div class="window"><div class="window__bar"><i></i><i></i><i></i></div>
+        <div data-stack>
+          <img data-frame src="assets/images/minus-desk.jpg" alt="Сайт автосервиса" width="1400" height="875" loading="lazy">
+          <img data-frame src="assets/images/elit-desk.jpg" alt="Сайт бани" width="1400" height="875" loading="lazy">
+          <img data-frame src="assets/images/zhar-desk.jpg" alt="Сайт кофейни" width="1400" height="875" loading="lazy">
+          <img data-frame src="assets/images/obzhig-desk.jpg" alt="Сайт мастерской керамики" width="1400" height="875" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="raboty">
+    <div class="wrap">
+      <p class="label" data-reveal="up">Работы</p>
+      <h2 class="display display--lg" data-reveal="up" style="margin-top:1rem;max-width:18ch">На компьютере и на телефоне</h2>
+      <p class="lede soft" data-reveal="up" style="margin-top:1rem;max-width:52ch">Это образцы: названия, цены и контакты на них условные. Под ваш бизнес сделаю свой дизайн с вашими данными и фото.</p>
+      <div class="works">
+        <article class="work" data-reveal="up">
+          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/minus-desk.jpg" alt="Сайт автосервиса «Минус 30» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/minus-phone.jpg" alt="Сайт автосервиса на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <h3>«Минус 30» · автосервис</h3><p>Подготовка машины к зиме: услуги с ценами, запись на проверку.</p>
+        </article>
+        <article class="work" data-reveal="up">
+          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/elit-desk.jpg" alt="Сайт бани «Элит» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/elit-phone.jpg" alt="Сайт бани на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <h3>«Элит» · баня</h3><p>Шесть залов с ценами, сцена «пар, вода, покой», бронирование.</p>
+        </article>
+        <article class="work" data-reveal="up">
+          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/zhar-desk.jpg" alt="Сайт кофейни «Жар» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/zhar-phone.jpg" alt="Сайт кофейни на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <h3>«Жар» · кофейня и обжарка</h3><p>Меню с ценами, способы заваривания, форма заявки.</p>
+        </article>
+        <article class="work" data-reveal="up">
+          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/obzhig-desk.jpg" alt="Сайт мастерской «Обжиг» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/obzhig-phone.jpg" alt="Сайт мастерской на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <h3>«Обжиг» · мастерская керамики</h3><p>Курсы и посуда на заказ, выбор глазури прокруткой.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-dark" id="kak">
+    <div class="wrap">
+      <p class="label" data-reveal="up">Как работаю</p>
+      <h2 class="display display--lg" data-reveal="up" style="margin-top:1rem;max-width:20ch">Сначала показываю, потом договариваемся</h2>
+      <ol class="steps" data-stagger>
+        <li data-reveal="up"><b>Присылаете ссылку</b><span>на карточку в картах, соцсеть или пару слов о своём деле</span></li>
+        <li data-reveal="up"><b>Первый вариант</b><span>в течение <span class="nw">2–3 дней</span> показываю, как будет выглядеть сайт на компьютере и телефоне</span></li>
+        <li data-reveal="up"><b>Вносим правки</b><span>тексты, цены, фото, цвета: обычно в тот же день</span></li>
+        <li data-reveal="up"><b>Запускаем</b><span>помогаю с адресом сайта и ставлю ссылку в вашу карточку</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="ceny">
+    <div class="wrap">
+      <p class="label" data-reveal="up">Цены</p>
+      <h2 class="display display--lg" data-reveal="up" style="margin-top:1rem">Два варианта</h2>
+      <div class="prices" data-stagger>
+        <div class="price-card price-card--main" data-reveal="up">
+          <h3>Сайт-одностраничник</h3>
+          <div class="sum">от 15 000 ₽</div>
+          <ul><li>свой дизайн под вашу нишу</li><li>услуги и цены, фото работ, отзывы</li><li>кнопки звонка и мессенджеров</li><li>удобно на телефоне</li></ul>
+        </div>
+        <div class="price-card" data-reveal="up">
+          <h3>Сайт с заявками и записью</h3>
+          <div class="sum">от 25 000 ₽</div>
+          <ul><li>всё из первого варианта</li><li>форма заявки или онлайн-запись</li><li>особые анимации под ваш бизнес</li><li>доработки по вашему списку</li></ul>
+        </div>
+      </div>
+      <p class="price-note" data-reveal="up">Адрес сайта и размещение оплачиваются отдельно, обычно это небольшая сумма в год. Помогу выбрать и всё подключу.</p>
+    </div>
+  </section>
+
+  <section class="section faq" id="voprosy">
+    <div class="wrap" style="max-width:52rem">
+      <h2 class="display display--md" data-reveal="up">Частые вопросы</h2>
+      <div style="margin-top:2rem" data-reveal="up">
+        <details><summary>А если мне не понравится первый вариант?</summary><p>Тогда вы ничего не должны. Первый вариант я показываю, чтобы вы увидели, как будет выглядеть сайт, ещё до договорённостей.</p></details>
+        <details><summary>Вы делаете сайты с помощью нейросетей?</summary><p>Да, использую ИИ-инструменты, поэтому получается быстро. Тексты, фото и каждую страницу проверяю и довожу сам, правки тоже вношу я.</p></details>
+        <details><summary>Можно поставить мои фотографии?</summary><p>Конечно. Лучше всего настоящие фото ваших работ, зала или мастерской: присылайте, я обработаю и расставлю.</p></details>
+        <details><summary>Я не из вашего города. Это важно?</summary><p>Нет. Работаю удалённо: всё обсуждаем в мессенджере, а результат вы смотрите на своём телефоне и компьютере.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-accent contact" id="kontakt">
+    <div class="wrap">
+      <h2 class="display display--lg" data-split>Расскажите о своём деле</h2>
+      <p class="lede" data-reveal="up" style="margin-top:1rem;--delay:250ms">Пришлите ссылку на карточку или соцсеть, и в течение <span class="nw">2–3 дней</span> я покажу, как может выглядеть ваш сайт.</p>
+      <div class="btn-row" data-reveal="up" style="margin-top:2rem;--delay:350ms">
+        <a class="btn" href="https://t.me/McFox1" rel="noopener">Написать в Telegram</a>
+        <a class="btn btn--ghost" href="https://vk.ru/pashtetik228" rel="noopener">Написать во ВКонтакте</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap foot"><span>Павел · сайты для малого бизнеса</span><span>Работы на этой странице – образцы с условными данными</span></footer>
+
+<script src="engine/motion.js"></script>
+</body>
+</html>

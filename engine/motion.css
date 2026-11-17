@@ -1,0 +1,108 @@
+/* motion.css – стили к motion.js (версия 2). Все скрытия работают только при классе .js-motion на <html>,
+   поэтому без скрипта или при prefers-reduced-motion контент остаётся видимым. */
+
+:root { --ease: cubic-bezier(.22, 1, .36, 1); --stagger: 70ms; }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body { background: var(--page-bg, var(--bg, #fff)); transition: background-color .7s ease; }   /* data-drift меняет --page-bg */
+
+/* ---- появление ---- */
+.js-motion [data-reveal] {
+  opacity: 0;
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+  transition-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms));
+}
+.js-motion [data-reveal="up"]    { transform: translateY(28px); }
+.js-motion [data-reveal="left"]  { transform: translateX(-36px); }
+.js-motion [data-reveal="right"] { transform: translateX(36px); }
+.js-motion [data-reveal="scale"] { transform: scale(.94); }
+.js-motion [data-reveal].is-in   { opacity: 1; transform: none; }
+
+/* ---- заголовок по словам ---- */
+.js-motion [data-split] .w  { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .1em; margin-bottom: -.1em; }
+.js-motion [data-split] .wi { display: inline-block; transform: translateY(110%); transition: transform .9s var(--ease); transition-delay: calc(var(--w, 0) * 60ms + var(--delay, 0ms)); }
+.js-motion [data-split].is-in .wi { transform: none; }
+
+/* ---- закреплённая сцена ---- */
+[data-scene] { position: relative; height: calc(var(--span, 2) * 100vh); height: calc(var(--span, 2) * 100svh); }
+[data-scene] > [data-stage] { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.js-motion [data-cue] { opacity: var(--cue, 0); transform: translateY(calc((1 - var(--cue, 0)) * 28px)); will-change: opacity, transform; }
+[data-pan], [data-parallax] { will-change: transform; }
+
+/* ---- стопка кадров: кроссфейд по прогрессу. Родитель задаёт размер, кадры лежат друг на друге ---- */
+[data-stack] { position: relative; overflow: hidden; }
+[data-stack] > [data-frame] { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+[data-stack] > [data-frame]:first-child { position: relative; }              /* нижний кадр держит высоту и всегда непрозрачен */
+.js-motion [data-stack] > [data-frame]:first-child { opacity: 1; }
+
+/* подпись и кнопки, привязанные к кадру */
+/* подписи кадров кладите в одну ячейку сетки (родитель display:grid, дети grid-area:1/1): активная проявляется, остальные гаснут */
+[data-for] { opacity: 0; transition: opacity .35s ease; pointer-events: none; }
+[data-for].is-active { opacity: 1; pointer-events: auto; }
+[data-goto] { cursor: pointer; }
+
+/* ---- было / стало: два слоя, делитель --split ---- */
+.compare { position: relative; overflow: hidden; --split: 50%; touch-action: pan-y; user-select: none; border-radius: var(--radius, 12px); }
+.compare > img, .compare > svg { display: block; width: 100%; height: 100%; object-fit: cover; }
+.compare .compare__before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--split)) 0 0); }
+.compare .compare__handle { position: absolute; top: 0; bottom: 0; left: var(--split); width: 44px; margin-left: -22px; padding: 0; border: 0; background: none; cursor: ew-resize; }
+.compare .compare__handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / .2); }
+.compare .compare__handle::after { content: "↔"; position: absolute; top: 50%; left: 50%; width: 2.5rem; height: 2.5rem; margin: -1.25rem 0 0 -1.25rem; border-radius: 50%; background: #fff; color: #111; display: grid; place-items: center; box-shadow: 0 4px 16px rgb(0 0 0 / .3); font-size: 1.1rem; }
+.compare .compare__tag { position: absolute; bottom: .75rem; padding: .3em .7em; border-radius: 999px; background: rgb(0 0 0 / .55); color: #fff; font-size: .8125rem; }
+.compare .compare__tag--before { left: .75rem; } .compare .compare__tag--after { right: .75rem; }
+
+/* ---- украшения для мыши ---- */
+[data-tilt] { transition: transform .25s var(--ease); will-change: transform; }
+[data-magnet] { transition: transform .25s var(--ease); }
+[data-spotlight] { position: relative; }
+[data-spotlight]::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: var(--spot, 0); transition: opacity .4s ease;
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent, #fff) 16%, transparent), transparent 60%); }
+
+/* ---- меню-якоря и точки-главы (data-spy) ---- */
+.spy-nav a, a[data-spy] { transition: color .2s; }
+a[data-spy].is-active { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .45em; }   /* подчёркивание читается на любом фоне, цвет акцента на тёмной главе мог бы потеряться */
+.dots { position: fixed; z-index: 40; right: clamp(.6rem, 2vw, 1.4rem); top: 50%; transform: translateY(-50%); display: grid; gap: .9rem; }
+.dots { color: var(--page-ink, var(--ink, currentColor)); transition: color .4s; }
+.dots a { display: block; width: .7rem; height: .7rem; border-radius: 50%; border: 1.5px solid currentColor; opacity: .45; transition: opacity .2s, background .2s, transform .2s; font-size: 0; }
+.dots a.is-active { opacity: 1; background: var(--accent, currentColor); border-color: var(--accent, currentColor); transform: scale(1.25); }
+@media (max-width: 860px) { .dots { display: none; } }
+
+/* ---- липкая кнопка для телефона ---- */
+[data-sticky-cta] { position: fixed; z-index: 45; left: var(--gutter, 1rem); right: var(--gutter, 1rem); bottom: max(.8rem, env(safe-area-inset-bottom)); transform: translateY(160%); transition: transform .4s var(--ease); display: none; }
+[data-sticky-cta].is-shown { transform: none; }
+@media (max-width: 860px) { [data-sticky-cta] { display: block; } [data-sticky-cta] .btn { width: 100%; box-shadow: 0 10px 30px rgb(0 0 0 / .3); } }
+
+/* ---- звёзды рейтинга: заливка по --r от 0 до 5 ---- */
+.rating-stars { --r: 0; display: inline-block; font-size: 1.1rem; line-height: 1; letter-spacing: .12em; white-space: nowrap;
+  background: linear-gradient(90deg, var(--accent, #c80) calc(var(--r) / 5 * 100%), color-mix(in srgb, var(--ink, #000) 18%, transparent) 0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.rating-stars::before { content: "★★★★★"; }
+
+/* ---- фото крупно ---- */
+.zoom { border: 0; padding: 0; margin: 0; background: transparent; max-width: none; max-height: none; width: 100vw; height: 100svh; inset: 0; }
+.zoom[open] { display: grid; place-items: center; }
+.zoom::backdrop { background: rgb(0 0 0 / .72); }
+.zoom img { max-width: min(92vw, 60rem); max-height: 88svh; width: auto; height: auto; border-radius: var(--radius, 12px); cursor: zoom-out; background: #fff; }
+.zoom__close { position: fixed; top: 1rem; right: 1rem; width: 2.75rem; height: 2.75rem; border: 0; border-radius: 50%; background: #fff; color: #111; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+
+/* ---- зерно поверх страницы (необязательно): <div class="grain" aria-hidden="true"></div> ---- */
+.grain { position: fixed; inset: 0; z-index: 55; pointer-events: none; opacity: .07; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* ---- бегущая строка (только CSS) ---- */
+.marquee { overflow: hidden; }
+.marquee__track { display: flex; width: max-content; gap: var(--gap, 3rem); animation: marquee var(--speed, 30s) linear infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---- уважение к настройке «уменьшить движение» ---- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body { transition: none; }
+  [data-reveal], [data-split] .wi, [data-cue] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-scene] { height: auto; }
+  [data-scene] > [data-stage] { position: static; height: auto; overflow: visible; }
+  [data-pan] { transform: none !important; display: flex; flex-wrap: wrap; }
+  [data-parallax], [data-tilt], [data-magnet] { transform: none !important; }
+  [data-stack] > [data-frame] { opacity: 1 !important; position: relative; }
+  [data-stack] > [data-frame]:not(:first-child) { display: none; }
+  [data-for] { opacity: 1; pointer-events: auto; }
+  .marquee__track { animation: none; }
+}
