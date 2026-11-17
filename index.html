@@ -46,8 +46,18 @@
 
   /* работы списком */
   .works { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s7) var(--s6); margin-top: var(--s7); }
-  .work .device { margin-bottom: var(--s6); }
+  .work .device { margin-bottom: calc(var(--s6) + 2.5rem); }
   .work .phone { width: 26%; bottom: -10%; right: -2%; }
+  /* живой показ: страница образца целиком листается внутри окна и телефона при наведении (на телефоне – когда карточка на экране) */
+  .scr { position: relative; overflow: hidden; background: #111; }
+  .window .scr { aspect-ratio: 16 / 10; }
+  .phone .scr { aspect-ratio: 9 / 19.5; border-radius: 20px; }
+  .scr img { position: absolute; left: 0; top: 0; width: 100%; height: auto; border-radius: 0; transform: translateY(0); transition: transform 1.2s cubic-bezier(.4,0,.2,1); will-change: transform; }
+  .work.is-playing .scr img { transform: translateY(calc(-1 * var(--shift, 0px))); transition: transform var(--dur, 16s) cubic-bezier(.45,0,.55,1) .25s; }
+  .work .device { cursor: pointer; }
+  .work__hint { position: absolute; left: 50%; top: calc(28px + 1rem); transform: translateX(-50%); z-index: 2; padding: .45em 1em; border-radius: 999px; background: rgba(20,22,27,.78); color: #fff; font-size: var(--t-xs); white-space: nowrap; pointer-events: none; transition: opacity .3s; }
+  .work.is-playing .work__hint { opacity: 0; }
+  @media (hover: none) { .work__hint { display: none; } }
   .work h3 { font: 600 var(--t-lg)/1.2 var(--font-display); margin-top: var(--s5); }
   .work p { color: var(--ink-soft); margin-top: var(--s2); }
 
@@ -143,22 +153,22 @@
     <div class="wrap">
       <p class="label" data-reveal="up">Работы</p>
       <h2 class="display display--lg" data-reveal="up" style="margin-top:1rem;max-width:18ch">На компьютере и на телефоне</h2>
-      <p class="lede soft" data-reveal="up" style="margin-top:1rem;max-width:52ch">Это образцы: названия, цены и контакты на них условные. Под ваш бизнес сделаю свой дизайн с вашими данными и фото.</p>
+      <p class="lede soft" data-reveal="up" style="margin-top:1rem;max-width:52ch">Каждая работа пролистается целиком: наведите на неё курсор, а на телефоне просто долистайте до неё. Это образцы: названия, цены и контакты на них условные. Под ваш бизнес сделаю свой дизайн с вашими данными и фото.</p>
       <div class="works">
         <article class="work" data-reveal="up">
-          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/minus-desk.jpg" alt="Сайт автосервиса «Минус 30» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/minus-phone.jpg" alt="Сайт автосервиса на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <div class="device"><span class="work__hint" aria-hidden="true">Наведите – страница пролистается</span><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><div class="scr"><img src="assets/images/minus-full-desk.jpg" alt="Сайт автосервиса «Минус 30» на компьютере" loading="lazy"></div></div><div class="phone"><div class="scr"><img src="assets/images/minus-full-phone.jpg" alt="Сайт автосервиса на телефоне" loading="lazy"></div></div></div>
           <h3>«Минус 30» · автосервис</h3><p>Подготовка машины к зиме: услуги с ценами, запись на проверку.</p>
         </article>
         <article class="work" data-reveal="up">
-          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/elit-desk.jpg" alt="Сайт бани «Элит» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/elit-phone.jpg" alt="Сайт бани на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <div class="device"><span class="work__hint" aria-hidden="true">Наведите – страница пролистается</span><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><div class="scr"><img src="assets/images/elit-full-desk.jpg" alt="Сайт бани «Элит» на компьютере" loading="lazy"></div></div><div class="phone"><div class="scr"><img src="assets/images/elit-full-phone.jpg" alt="Сайт бани на телефоне" loading="lazy"></div></div></div>
           <h3>«Элит» · баня</h3><p>Шесть залов с ценами, сцена «пар, вода, покой», бронирование.</p>
         </article>
         <article class="work" data-reveal="up">
-          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/zhar-desk.jpg" alt="Сайт кофейни «Жар» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/zhar-phone.jpg" alt="Сайт кофейни на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <div class="device"><span class="work__hint" aria-hidden="true">Наведите – страница пролистается</span><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><div class="scr"><img src="assets/images/zhar-full-desk.jpg" alt="Сайт кофейни «Жар» на компьютере" loading="lazy"></div></div><div class="phone"><div class="scr"><img src="assets/images/zhar-full-phone.jpg" alt="Сайт кофейни на телефоне" loading="lazy"></div></div></div>
           <h3>«Жар» · кофейня и обжарка</h3><p>Меню с ценами, способы заваривания, форма заявки.</p>
         </article>
         <article class="work" data-reveal="up">
-          <div class="device"><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><img src="assets/images/obzhig-desk.jpg" alt="Сайт мастерской «Обжиг» на компьютере" width="1400" height="875" loading="lazy"></div><div class="phone"><img src="assets/images/obzhig-phone.jpg" alt="Сайт мастерской на телефоне" width="560" height="1213" loading="lazy"></div></div>
+          <div class="device"><span class="work__hint" aria-hidden="true">Наведите – страница пролистается</span><div class="window"><div class="window__bar"><i></i><i></i><i></i></div><div class="scr"><img src="assets/images/obzhig-full-desk.jpg" alt="Сайт мастерской «Обжиг» на компьютере" loading="lazy"></div></div><div class="phone"><div class="scr"><img src="assets/images/obzhig-full-phone.jpg" alt="Сайт мастерской на телефоне" loading="lazy"></div></div></div>
           <h3>«Обжиг» · мастерская керамики</h3><p>Курсы и посуда на заказ, выбор глазури прокруткой.</p>
         </article>
       </div>
@@ -226,5 +236,39 @@
 <footer class="wrap foot"><span>Павел · сайты для малого бизнеса</span><span>Работы на этой странице – образцы с условными данными</span></footer>
 
 <script src="engine/motion.js"></script>
+<script>
+/* живой показ работ: считаем, на сколько сдвинуть длинный снимок, и запускаем по наведению или (на сенсорных экранах) когда карточка на экране */
+(function () {
+  var works = Array.prototype.slice.call(document.querySelectorAll('.work'));
+  function measure() {
+    works.forEach(function (w) {
+      w.querySelectorAll('.scr').forEach(function (s) {
+        var img = s.querySelector('img'); if (!img || !img.naturalWidth) return;
+        var shift = Math.max(0, img.getBoundingClientRect().height - s.clientHeight);
+        img.style.setProperty('--shift', shift + 'px');
+        img.style.setProperty('--dur', Math.max(7, Math.min(15, shift / s.clientHeight * 1.6)).toFixed(1) + 's');
+      });
+    });
+  }
+  works.forEach(function (w) {
+    w.querySelectorAll('.scr img').forEach(function (img) { img.loading = 'eager'; if (img.complete) measure(); else img.addEventListener('load', measure); });
+  });
+  window.addEventListener('resize', measure);
+  var touch = window.matchMedia('(hover: none)').matches;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!touch) {
+    works.forEach(function (w) {
+      var d = w.querySelector('.device');
+      d.addEventListener('mouseenter', function () { measure(); w.classList.add('is-playing'); });
+      d.addEventListener('mouseleave', function () { w.classList.remove('is-playing'); });
+    });
+  } else if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { var w = e.target.closest('.work'); if (e.isIntersecting) { measure(); w.classList.add('is-playing'); } else w.classList.remove('is-playing'); });
+    }, { threshold: 0.6 });
+    works.forEach(function (w) { io.observe(w.querySelector('.device')); });
+  }
+})();
+</script>
 </body>
 </html>
